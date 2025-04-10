@@ -28,3 +28,20 @@ export async function fetchProductBySlug(slug) {
 }
 
 /*Skirve en funksjon for å sette inn eller oppdatere kommentar arrayen som ligger på produkter */
+
+export async function updateComments(userId, productId, comment) {
+  const result = await writeClient
+    .patch(productId)
+    .setIfMissing({ comments: [] })
+    .append("comments", [
+      { user: { _type: "user", _ref: userId }, comment: comment },
+    ])
+    .commit({ autoGenerateArrayKeys: true })
+    .then(() => {
+      return "success";
+    })
+    .catch((error) => {
+      return "Error" + error.message;
+    });
+  return result;
+}

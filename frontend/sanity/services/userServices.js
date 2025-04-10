@@ -25,9 +25,26 @@ export async function fetchUserBySlug(slug) {
 /*En fetch som henter en bruker basert på id, denne er foreløpelig statisk*/
 export async function fetchUserById() {
   const data = await client.fetch(
-    `*[_type == "users" && _id == "58db69b2-45e8-4144-b56f-4fd7907d5840"]`
+    `*[_type == "users" && _id == "f56e3a72-66e7-40f1-b892-7b3cd5b5ff49"]`
   );
   return data;
 }
 
 /*TODO: Skrive en fetch funksjon for å hente alle kommentarerene en bruker har gjort på et produkt */
+
+export async function fetchAllFromUser(id) {
+  const data = await client.fetch(
+    `*[
+ _type == 'products'
+]
+{
+  name,
+  "comments": comments [
+    user._id == "$id"
+    {comment}
+    ]
+}`,
+    { id }
+  );
+  return data;
+}

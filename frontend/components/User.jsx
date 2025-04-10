@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { fetchUserBySlug } from "../sanity/services/userServices";
+import { Await, useParams } from "react-router-dom";
+import {
+  fetchAllFromUser,
+  fetchUserBySlug,
+} from "../sanity/services/userServices";
 
 export default function User() {
   const { user } = useParams();
@@ -18,8 +21,16 @@ export default function User() {
 
   /*TODO: Lage funksjon som henter en fetch for å hente alle kommentarene en bruker har lagt igjen på ulike produkter */
 
+  const getCommentsFromUser = async (id) => {
+    const data = await fetchAllFromUser(id);
+    console.log("kommentarer", data);
+  };
   /*TODO: Bruk useEffect for å hente kommentarer basert på brukerens ID
   ved å kalle funksjonen og sende med ID som argument.*/
+
+  useEffect(() => {
+    userData && userData._id ? getCommentsFromUser(userData?._id) : null;
+  }, [userData]);
 
   return (
     <>
